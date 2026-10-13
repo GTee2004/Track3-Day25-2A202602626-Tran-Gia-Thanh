@@ -28,22 +28,22 @@ fallback_order: [alpha, alpha-eu, beta, gamma-mini]
 # YOUR client settings (read by ResilientClient). Tune them, explain them.
 # ----------------------------------------------------------------------------
 client:
-  attempt_timeout_s: 8.0
-  max_attempts_per_provider: 2      # 1 retry on the same provider, then fail over
+  attempt_timeout_s: 5.0            # bound queue/hang time before failover (G2, G6)
+  max_attempts_per_provider: 2      # at most 1 budgeted retry on the same provider
   min_time_left_s: 1.0              # don't start an attempt that cannot finish
   backoff_base_s: 0.25
   backoff_cap_s: 4.0
-  retry_budget_ratio: 0.1           # retries <= ~10% of first attempts
-  retry_budget_min_per_s: 0.5
-  retry_budget_max_tokens: 20
+  retry_budget_ratio: 0.05          # leave margin below G3's 10% retry-ratio ceiling
+  retry_budget_min_per_s: 0.1       # slow refill limits retries during a sustained incident
+  retry_budget_max_tokens: 8       # smaller initial burst limits retry amplification
   quota_cooldown_s: 300
   breaker:
     window_size: 20
     min_calls: 10
     failure_rate_threshold: 0.5
-    slow_call_s: 5.0
+    slow_call_s: 4.5                # count near-timeout successes as slow
     slow_rate_threshold: 0.6
-    open_duration_s: 10.0
+    open_duration_s: 8.0           # probe recovery promptly after G2/G6 restore
     half_open_max_probes: 2
     half_open_successes: 2
 
@@ -53,7 +53,7 @@ client:
 # wrong_answers_by_reason, tune each value and justify it in report section 8.
 # ----------------------------------------------------------------------------
 cache:
-  similarity_threshold: 0.80
-  ttl_s: 600
-  max_stale_s: 0
+  similarity_threshold: 0.90
+  ttl_s: 30
+  max_stale_s: 180
   max_entries: 500
