@@ -1,6 +1,6 @@
 # Lab 25B — Report
 
-**Họ tên / nhóm:** Trần Gia Thành **Mã:** 2A2026026262  **Commit:**   **Điểm tự động (`make grade`):** 84 / 88 
+**Họ tên / nhóm:** Trần Gia Thành **Mã:** 2A2026026262  **Commit:** 9784424216270ffa796458d4f8bf11a0a36066ea  **Điểm tự động (`make grade`):** 84 / 88 
 
 > Mọi nhận định phải có số. Dán số từ `reports/gameday/*.json`, `reports/workflows.json`, `reports/slo.json`.
 
